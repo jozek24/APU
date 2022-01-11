@@ -1,0 +1,158 @@
+Version: 2.0
+
+#########################
+# Alternatives Section
+#
+
+Alternatives: &alternatives
+ # Here, we list all the alternatives, together with their attributes. 
+ # We can use these attributes later in the file when defining 
+ # preferenceFunctions. The attributes can be quantitative or 
+ # qualitative.
+ 
+  Apple iPhone 11 64GB (czarny):
+    Wyswietlacz: 6.1
+    Ram: 4
+    Dysk: 64
+    Aparat: 24
+    Komunikacja_wi_fi: 1
+    Cena: 2799
+
+  Apple iPhone 11 64GB (bialy):
+    Wyswietlacz: 6.1
+    Ram: 4
+    Dysk: 64
+    Aparat: 24
+    Komunikacja_wi_fi: 1
+    Cena: 2799
+
+  Apple iPhone 12 128GB (fioletowy):
+    Wyswietlacz: 6.1
+    Ram: 4
+    Dysk: 128
+    Aparat: 24
+    Komunikacja_wi_fi: 1
+    Cena: 4099
+
+  Apple iPhone 12 64GB (niebieski):
+    Wyswietlacz: 6.1
+    Ram: 4
+    Dysk: 64
+    Aparat: 24
+    Komunikacja_wi_fi: 1
+    Cena: 3799
+ 
+  Apple iPhone 11 64GB (czerwony):
+    Wyswietlacz: 6.1
+    Ram: 4
+    Dysk: 64
+    Aparat: 24
+    Komunikacja_wi_fi: 1
+    Cena: 2799
+
+  Apple iPhone Xr 64GB (zolty):
+    Wyswietlacz: 6.1
+    Ram: 4
+    Dysk: 64
+    Aparat: 12
+    Komunikacja_wi_fi: 1
+    Cena: 3029
+
+  Apple iPhone 12 mini 128GB (czerwony):
+    Wyswietlacz: 5.4
+    Ram: 4
+    Dysk: 128
+    Aparat: 24
+    Komunikacja_wi_fi: 1
+    Cena: 3599
+
+  Apple iPhone 12 Pro 128GB (zloty):
+    Wyswietlacz: 6.1
+    Ram: 6
+    Dysk: 128
+    Aparat: 36
+    Komunikacja_wi_fi: 1
+    Cena: 6399
+
+  Apple iPhone SE 256GB (czarny):
+    Wyswietlacz: 4.7
+    Ram: 4
+    Dysk: 256
+    Aparat: 12
+    Komunikacja_wi_fi: 1
+    Cena: 2939
+
+  Apple iPhone 12 Pro Max 512GB (srebrny):
+    Wyswietlacz: 6.7
+    Ram: 6
+    Dysk: 512
+    Aparat: 36
+    Komunikacja_wi_fi: 1
+    Cena: 6359
+    
+Goal:
+  name: Wybierz iPhone
+  preferences:
+    # Robimy zalozenia pod wzgedem wydajnosci, jokosci, stylu i ceny
+    # 1 means: A is equal to B
+    # 9 means: A is highly preferrable to B
+    # 1/9 means: B is highly preferrable to A
+    pairwise:
+      - [Wydajnosc, Jakosc, 4]
+      - [Wydajnosc, Styl, 3]
+      - [Wydajnosc, Cena, 2]
+      - [Jakosc, Styl, 2]
+      - [Jakosc, Cena, 2]
+      - [Styl, Cena, 2]
+  children: 
+    Wydajnosc:
+      preferences:
+        pairwise:
+          - [ram, dysk, 6]
+      children:
+        ram:
+          preferences:
+            pairwiseFunction:
+            # Alternatively to the pairwise preferences, you 
+            # can define a preference function. This function
+            # is in R syntax, and needs to have two arguments.
+            # The Calculate method will pass all combinations
+            # of alternatives to this function, and the function
+            # is expected to return the pairwise preference, i.e.
+            # a number between 1/9 and 9.
+              function(a1, a2) min(9, max(1/9, a1$Ram/a2$Ram))
+          children: *alternatives
+        dysk:
+          preferences:
+            pairwiseFunction:
+              function(a1, a2) min(9, max(1/9, a1$Dysk/a2$Dysk))
+          children: *alternatives
+    Jakosc:
+      preferences:
+          pairwise:
+            - [jakosc zdjec, Ekran, 2]
+      children:
+        jakosc zdjec:
+          preferences:
+            pairwiseFunction:
+              function(a1, a2) min(9, max(1/9, a1$Aparat/a2$Aparat))
+          children: *alternatives
+        Ekran:
+          preferences:
+            pairwiseFunction:
+              function(a1, a2) min(9, max(1/9, a1$Wyswietlacz/a2$Wyswietlacz))
+          children: *alternatives
+    Styl:
+      preferences:
+        pairwiseFunction:
+            function(a1, a2) min(9, max(1/9, a1$Wyswietlacz/a2$Wyswietlacz))
+      children: *alternatives
+    Cena:
+      preferences:
+        pairwiseFunction:
+              function(a1, a2) min(9, max(1/9, a1$Cena/a2$Cena))
+      children: *alternatives 
+ 
+ #
+ # End of Goal Section
+ #
