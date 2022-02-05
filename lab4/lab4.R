@@ -12,7 +12,7 @@ data[ ,'pamiec_RAM'] <- factor(data[ ,'pamiec_RAM'])
 
 data[0:6]
 
-m1 <- C5.0 (data[0:6],factor(data$ocena_klienta))
+m1 <- C5.0 (data[0:6],factor(data$pamiec_RAM))
 
 summary(m1)
 
